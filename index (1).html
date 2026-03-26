@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NBSC – OJT Weekly Progress Report | Form 9</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     TOP BAR
+════════════════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">
+      <div class="brand-badge">NBSC</div>
+      <div class="brand-text">
+        <div class="brand-title">OJT Weekly Report System</div>
+        <div class="brand-sub">Form 9 · Second Semester AY 2025–2026</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="tb-btn ghost" id="btnLoad" onclick="loadFromSheets()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.67"/></svg>
+        Load Data
+      </button>
+      <button class="tb-btn ghost" onclick="clearForm()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        Clear
+      </button>
+      <button class="tb-btn primary" onclick="saveToSheets()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save to Sheets
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════
+     MAIN LAYOUT
+════════════════════════════════════════════════════ -->
+<div class="page-layout">
+
+  <!-- ── LEFT: FORM ── -->
+  <main class="form-area">
+    <div id="reportForm">
+
+      <!-- ─── INSTITUTION HEADER ─── -->
+      <div class="inst-header">
+        <div class="inst-logo left-logo">
+          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+            <circle cx="40" cy="40" r="38" fill="#1a4731" stroke="#c9a227" stroke-width="3"/>
+            <text x="40" y="28" text-anchor="middle" fill="#c9a227" font-size="9" font-family="serif" font-weight="bold">REPUBLIC OF</text>
+            <text x="40" y="38" text-anchor="middle" fill="#fff" font-size="8" font-family="serif">THE PHILIPPINES</text>
+            <text x="40" y="52" text-anchor="middle" fill="#c9a227" font-size="11" font-family="serif" font-weight="bold">NBSC</text>
+            <circle cx="40" cy="40" r="38" fill="none" stroke="#c9a227" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="inst-text">
+          <div class="inst-republic">Republic of the Philippines</div>
+          <div class="inst-name">NORTHERN BUKIDNON STATE COLLEGE</div>
+          <div class="inst-address">Manolo Fortich, 8703 Bukidnon</div>
+          <div class="inst-motto"><em>Creando futura, Transformationis vitae, Ductae a Deo</em></div>
+        </div>
+        <div class="inst-logo right-logo">
+          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="64" height="64">
+            <circle cx="40" cy="40" r="38" fill="#1a3a5c" stroke="#c9a227" stroke-width="3"/>
+            <text x="40" y="35" text-anchor="middle" fill="#fff" font-size="10" font-family="sans-serif" font-weight="bold">ICS</text>
+            <text x="40" y="50" text-anchor="middle" fill="#c9a227" font-size="7" font-family="sans-serif">COLLEGE</text>
+            <circle cx="40" cy="40" r="38" fill="none" stroke="#c9a227" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="inst-divider"></div>
+
+      <!-- ─── FORM TITLE ─── -->
+      <div class="form-title-block">
+        <div class="form-number">Form 9</div>
+        <h1 class="form-main-title">ON-THE-JOB TRAINING LOG SHEET</h1>
+        <h2 class="form-sub-title">WEEKLY PROGRESS REPORT</h2>
+        <div class="form-term">Term <u><strong>Second Semester</strong></u> AY 2025–2026</div>
+      </div>
+
+      <!-- ─── INFO TABLE (Name / Company / Week) ─── -->
+      <div class="info-table-card">
+        <div class="info-row">
+          <div class="info-label">Name</div>
+          <div class="info-value">
+            <input type="text" id="traineeName" class="info-input" placeholder="Full name of student trainee" />
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Company</div>
+          <div class="info-value">
+            <input type="text" id="company" class="info-input" placeholder="Name of Host Training Establishment (HTE)" />
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-label">Week</div>
+          <div class="info-value">
+            <select id="weekNumber" class="info-input info-select">
+              <option value="">— Select Week —</option>
+              <option>Week 1</option><option>Week 2</option><option>Week 3</option>
+              <option>Week 4</option><option>Week 5</option><option>Week 6</option>
+              <option>Week 7</option><option>Week 8</option><option>Week 9</option>
+              <option>Week 10</option><option>Week 11</option><option>Week 12</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── OBJECTIVES ─── -->
+      <div class="section-block">
+        <div class="section-label-row">
+          <span class="section-bold-label">Objective(s) for the week:</span>
+          <button class="add-btn" onclick="openModal('objectives')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Objective
+          </button>
+        </div>
+        <div id="objectivesList" class="objectives-list">
+          <div class="placeholder-row">
+            <span class="placeholder-num">1.</span>
+            <span class="placeholder-line">Click <strong>Add Objective</strong> to enter your weekly objective</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── ACTIVITIES & REFLECTIONS TABLE ─── -->
+      <div class="section-block">
+        <div class="ar-table-header">
+          <div class="ar-add-btn-row">
+            <button class="add-btn" onclick="openModal('activities')">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Activity
+            </button>
+            <button class="add-btn teal" onclick="openModal('reflections')">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Reflection
+            </button>
+          </div>
+        </div>
+        <div class="ar-table-wrapper">
+          <table class="ar-table" id="arTable">
+            <thead>
+              <tr>
+                <th class="col-activities">ACTIVITIES:</th>
+                <th class="col-reflections">REFLECTIONS:</th>
+              </tr>
+            </thead>
+            <tbody id="arTableBody">
+              <tr class="ar-empty-row" id="arEmptyRow">
+                <td colspan="2">
+                  <div class="ar-empty">
+                    <span>📋</span> No activities or reflections yet. Use the buttons above to add entries.
+                  </div>
+                </td>
+              </tr>
+              <!-- Blank rows for print look -->
+              <tr class="ar-blank-row print-only"><td></td><td></td></tr>
+              <tr class="ar-blank-row print-only"><td></td><td></td></tr>
+              <tr class="ar-blank-row print-only"><td></td><td></td></tr>
+              <tr class="ar-blank-row print-only"><td></td><td></td></tr>
+              <tr class="ar-blank-row print-only"><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── DOCUMENTATION (Page 2) ─── -->
+      <div class="page-break-before"></div>
+      <div class="inst-header no-print-header" style="margin-top:0;">
+        <div class="inst-logo left-logo">
+          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="52" height="52">
+            <circle cx="40" cy="40" r="38" fill="#1a4731" stroke="#c9a227" stroke-width="3"/>
+            <text x="40" y="52" text-anchor="middle" fill="#c9a227" font-size="11" font-family="serif" font-weight="bold">NBSC</text>
+          </svg>
+        </div>
+        <div class="inst-text" style="font-size:0.78rem;">
+          <div class="inst-republic">Republic of the Philippines</div>
+          <div class="inst-name" style="font-size:0.9rem;">NORTHERN BUKIDNON STATE COLLEGE</div>
+          <div class="inst-address">Manolo Fortich, 8703 Bukidnon</div>
+          <div class="inst-motto"><em>Creando futura, Transformationis vitae, Ductae a Deo</em></div>
+        </div>
+        <div class="inst-logo right-logo">
+          <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="52" height="52">
+            <circle cx="40" cy="40" r="38" fill="#1a3a5c" stroke="#c9a227" stroke-width="3"/>
+            <text x="40" y="45" text-anchor="middle" fill="#fff" font-size="10" font-family="sans-serif" font-weight="bold">ICS</text>
+          </svg>
+        </div>
+      </div>
+      <div class="inst-divider"></div>
+
+      <div class="section-block documentation-section">
+        <div class="section-label-row">
+          <span class="section-bold-label">Documentation:</span>
+          <button class="add-btn purple" onclick="openModal('documentation')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Images
+          </button>
+        </div>
+        <div id="docGallery" class="doc-gallery">
+          <div class="doc-empty">
+            <div class="doc-empty-icon">📷</div>
+            <p>No documentation uploaded yet.<br/>Click <strong>Upload Images</strong> to add photos or files.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── SIGNATURES ─── -->
+      <div class="signatures-section">
+        <div class="sig-signed-label">Signed:</div>
+        <div class="sig-row-top">
+          <div class="sig-block">
+            <div class="sig-line-area">
+              <input type="text" class="sig-name-input" id="sigTrainee" placeholder="Student Trainee's Name" />
+              <div class="sig-underline"></div>
+            </div>
+            <div class="sig-role-label"><strong>Student Trainee</strong></div>
+            <div class="sig-date-row">
+              <label>Date:</label>
+              <input type="date" class="sig-date-input" id="sigTraineeDate" />
+            </div>
+          </div>
+          <div class="sig-block">
+            <div class="sig-line-area">
+              <input type="text" class="sig-name-input" id="sigSupervisor" placeholder="HTE Supervisor's Name" />
+              <div class="sig-underline"></div>
+            </div>
+            <div class="sig-role-label"><strong>Signature over Printed Name of HTE Supervisor</strong></div>
+            <div class="sig-date-row">
+              <label>Date:</label>
+              <input type="date" class="sig-date-input" id="sigSupervisorDate" />
+            </div>
+          </div>
+        </div>
+        <div class="sig-row-bottom">
+          <div class="sig-block">
+            <div class="sig-line-area">
+              <input type="text" class="sig-name-input" id="sigCoordinator" placeholder="OJT Coordinator's Name" />
+              <div class="sig-underline"></div>
+            </div>
+            <div class="sig-role-label"><strong>OJT Coordinator</strong></div>
+            <div class="sig-date-row">
+              <label>Date:</label>
+              <input type="date" class="sig-date-input" id="sigCoordinatorDate" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page number -->
+      <div class="page-num-bar">
+        <span id="lastSaved">Last saved: —</span>
+        <span class="page-nums">12 &nbsp;|&nbsp; 13</span>
+      </div>
+
+    </div><!-- /#reportForm -->
+  </main>
+
+  <!-- ── RIGHT: SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <!-- Export -->
+    <div class="sb-card">
+      <div class="sb-card-title">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 10v6m0 0l-3-3m3 3l3-3M4.5 19.5h15"/></svg>
+        Export Report
+      </div>
+      <div class="export-stack">
+        <button class="exp-btn pdf-btn" onclick="exportPDF()">
+          <span class="exp-icon">📄</span>
+          <span class="exp-label">Download PDF</span>
+        </button>
+        <button class="exp-btn prt-btn" onclick="window.print()">
+          <span class="exp-icon">🖨️</span>
+          <span class="exp-label">Print Report</span>
+        </button>
+        <button class="exp-btn doc-btn" onclick="exportDOCX()">
+          <span class="exp-icon">📝</span>
+          <span class="exp-label">Download DOCX</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="sb-card">
+      <div class="sb-card-title">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        This Week's Summary
+      </div>
+      <div class="stats-grid">
+        <div class="stat-tile green">
+          <div class="stat-n" id="statObj">0</div>
+          <div class="stat-l">Objectives</div>
+        </div>
+        <div class="stat-tile blue">
+          <div class="stat-n" id="statAct">0</div>
+          <div class="stat-l">Activities</div>
+        </div>
+        <div class="stat-tile amber">
+          <div class="stat-n" id="statRef">0</div>
+          <div class="stat-l">Reflections</div>
+        </div>
+        <div class="stat-tile purple">
+          <div class="stat-n" id="statDoc">0</div>
+          <div class="stat-l">Files</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Completion -->
+    <div class="sb-card">
+      <div class="sb-card-title">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Form Completion
+      </div>
+      <div class="progress-ring-wrap">
+        <svg class="prog-ring" width="90" height="90" viewBox="0 0 90 90">
+          <circle cx="45" cy="45" r="36" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+          <circle id="progRingFill" cx="45" cy="45" r="36" fill="none" stroke="#1a4731" stroke-width="8"
+            stroke-dasharray="226.2" stroke-dashoffset="226.2" stroke-linecap="round"
+            transform="rotate(-90 45 45)"/>
+        </svg>
+        <div class="prog-ring-label" id="progPct">0%</div>
+      </div>
+      <div class="completion-items">
+        <div class="ci-row"><span class="ci-dot" id="ciName"></span> Name filled</div>
+        <div class="ci-row"><span class="ci-dot" id="ciCompany"></span> Company filled</div>
+        <div class="ci-row"><span class="ci-dot" id="ciWeek"></span> Week selected</div>
+        <div class="ci-row"><span class="ci-dot" id="ciObj"></span> Objective added</div>
+        <div class="ci-row"><span class="ci-dot" id="ciAct"></span> Activity added</div>
+        <div class="ci-row"><span class="ci-dot" id="ciRef"></span> Reflection added</div>
+      </div>
+    </div>
+
+    <!-- Google Sheets Setup -->
+    <div class="sb-card setup-card">
+      <div class="sb-card-title">⚙️ Google Sheets Backend</div>
+      <p class="setup-hint">Paste your deployed Apps Script Web App URL to enable cloud save/load:</p>
+      <input type="url" id="scriptUrl" class="setup-input" placeholder="https://script.google.com/macros/s/…/exec" />
+      <button class="setup-btn" onclick="saveScriptUrl()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 0111 18.36 19.45 19.45 0 014.64 12 19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Connect
+      </button>
+      <a href="#" class="setup-guide-link" onclick="showSetupGuide(event)">View Setup Guide →</a>
+    </div>
+
+  </aside>
+</div><!-- /.page-layout -->
+
+<!-- ═══════════════════════════════════════════════════
+     TOAST NOTIFICATIONS
+════════════════════════════════════════════════════ -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     LOADER OVERLAY
+════════════════════════════════════════════════════ -->
+<div id="loader" class="loader-overlay hidden">
+  <div class="loader-box">
+    <div class="loader-spinner"></div>
+    <div id="loaderMsg" class="loader-msg">Saving…</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MODAL: OBJECTIVES
+════════════════════════════════════════════════════ -->
+<div id="modalObjectives" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-hd-icon" style="background:#dcfce7;color:#166534;">🎯</div>
+      <h3 class="modal-hd-title">Add / Edit Objective</h3>
+      <button class="modal-x" onclick="closeModal('objectives')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <input type="hidden" id="objEditIdx" value="-1" />
+      <div class="mfg">
+        <label class="mlabel">Objective Statement <span class="req">*</span></label>
+        <input type="text" id="objText" class="minput" placeholder="e.g. Learn to deploy a web application to the cloud" />
+      </div>
+      <div class="mfg">
+        <label class="mlabel">Status</label>
+        <select id="objStatus" class="minput">
+          <option value="In Progress">🔵 In Progress</option>
+          <option value="Completed">✅ Completed</option>
+          <option value="Pending">⏳ Pending</option>
+          <option value="Carried Over">🔄 Carried Over</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="mfbtn cancel" onclick="closeModal('objectives')">Cancel</button>
+      <button class="mfbtn save" onclick="saveObjective()">Save Objective</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MODAL: ACTIVITIES
+════════════════════════════════════════════════════ -->
+<div id="modalActivities" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-hd-icon" style="background:#dbeafe;color:#1e3a8a;">⚡</div>
+      <h3 class="modal-hd-title">Add Activity</h3>
+      <button class="modal-x" onclick="closeModal('activities')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <input type="hidden" id="actEditIdx" value="-1" />
+      <div class="mfg">
+        <label class="mlabel">Activity / Task Performed <span class="req">*</span></label>
+        <input type="text" id="actTitle" class="minput" placeholder="e.g. Developed login authentication module" />
+      </div>
+      <div class="mfg">
+        <label class="mlabel">Description / Details</label>
+        <textarea id="actDesc" class="mtextarea" rows="3" placeholder="Briefly describe what you did, tools used, and outcome…"></textarea>
+      </div>
+      <div class="mfg-row">
+        <div class="mfg half">
+          <label class="mlabel">Date</label>
+          <input type="date" id="actDate" class="minput" />
+        </div>
+        <div class="mfg half">
+          <label class="mlabel">Hours Spent</label>
+          <input type="number" id="actHours" class="minput" placeholder="e.g. 3" min="0" max="24" step="0.5" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="mfbtn cancel" onclick="closeModal('activities')">Cancel</button>
+      <button class="mfbtn save" onclick="saveActivity()">Save Activity</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MODAL: REFLECTIONS
+════════════════════════════════════════════════════ -->
+<div id="modalReflections" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-hd-icon" style="background:#fef9c3;color:#854d0e;">💡</div>
+      <h3 class="modal-hd-title">Add Reflection</h3>
+      <button class="modal-x" onclick="closeModal('reflections')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <input type="hidden" id="refEditIdx" value="-1" />
+      <div class="mfg">
+        <label class="mlabel">Reflection Type</label>
+        <select id="refType" class="minput">
+          <option value="Learning">📚 Learning / Skill Gained</option>
+          <option value="Challenge">🧩 Challenge Encountered</option>
+          <option value="Achievement">🏆 Achievement / Milestone</option>
+          <option value="Improvement">📈 Area for Improvement</option>
+          <option value="General">💬 General Reflection</option>
+        </select>
+      </div>
+      <div class="mfg">
+        <label class="mlabel">Your Reflection <span class="req">*</span></label>
+        <textarea id="refContent" class="mtextarea" rows="5" placeholder="Write your thoughts, what you learned, challenges you overcame, or insights gained this week…"></textarea>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="mfbtn cancel" onclick="closeModal('reflections')">Cancel</button>
+      <button class="mfbtn save" onclick="saveReflection()">Save Reflection</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MODAL: DOCUMENTATION
+════════════════════════════════════════════════════ -->
+<div id="modalDocumentation" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal modal-wide">
+    <div class="modal-hd">
+      <div class="modal-hd-icon" style="background:#f3e8ff;color:#6b21a8;">📷</div>
+      <h3 class="modal-hd-title">Upload Documentation</h3>
+      <button class="modal-x" onclick="closeModal('documentation')">✕</button>
+    </div>
+    <div class="modal-bd">
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="dz-icon">☁️</div>
+        <div class="dz-text">Click or drag & drop images/files here</div>
+        <div class="dz-sub">PNG, JPG, GIF, PDF · Max 10MB each</div>
+        <input type="file" id="fileInput" multiple accept="image/*,.pdf" style="display:none" onchange="handleFileSelect(event)" />
+      </div>
+      <div id="previewGrid" class="preview-grid"></div>
+      <div class="mfg" style="margin-top:0.75rem;" id="captionGroup" style="display:none;">
+        <label class="mlabel">Caption / Description</label>
+        <input type="text" id="docCaption" class="minput" placeholder="Optional description for these images" />
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="mfbtn cancel" onclick="closeModal('documentation')">Cancel</button>
+      <button class="mfbtn save purple-btn" onclick="confirmUpload()">Add to Report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MODAL: SETUP GUIDE
+════════════════════════════════════════════════════ -->
+<div id="modalSetup" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal modal-wide">
+    <div class="modal-hd">
+      <div class="modal-hd-icon" style="background:#f0fdf4;color:#166534;">⚙️</div>
+      <h3 class="modal-hd-title">Google Sheets Setup Guide</h3>
+      <button class="modal-x" onclick="closeModal('setup')">✕</button>
+    </div>
+    <div class="modal-bd setup-guide">
+      <div class="setup-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Create a Google Sheet</strong><br/>
+          Go to <a href="https://sheets.google.com" target="_blank">sheets.google.com</a> → Create a new sheet named <code>OJT Reports</code>. Add these headers in Row 1:
+          <div class="code-block">Name | Company | Week | Objectives | Activities | Reflections | Image URLs | Timestamp | Sig_Trainee | Sig_Supervisor | Sig_Coordinator</div>
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Create a Google Drive Folder</strong><br/>
+          In Google Drive, create a folder named <code>OJT Documentation</code> and note its <strong>Folder ID</strong> (from the URL: <code>drive.google.com/drive/folders/<em>FOLDER_ID</em></code>).
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Open Apps Script</strong><br/>
+          In your Google Sheet → Extensions → Apps Script. Replace the code with the contents of <code>Code.gs</code> (provided in the download). Update the <code>SHEET_ID</code> and <code>FOLDER_ID</code> constants.
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>Deploy as Web App</strong><br/>
+          Click <strong>Deploy → New Deployment</strong> → Type: <em>Web app</em> → Execute as: <em>Me</em> → Who has access: <em>Anyone</em> → Deploy. Copy the Web App URL.
+        </div>
+      </div>
+      <div class="setup-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <strong>Connect the App</strong><br/>
+          Paste the Web App URL in the <em>Google Sheets Backend</em> panel on the right sidebar and click <strong>Connect</strong>.
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="mfbtn save" onclick="closeModal('setup')">Got it!</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
